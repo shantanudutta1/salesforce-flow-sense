@@ -1,0 +1,12 @@
+.DS_Store
+*.log
+.env
+.env.local
+.vscode/
+.idea/
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.claude/settings.local.json

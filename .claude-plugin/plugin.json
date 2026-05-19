@@ -1,0 +1,21 @@
+{
+  "name": "salesforce-flow-sense",
+  "version": "0.1.0",
+  "description": "Curated catalog of Salesforce Flow, Apex, and deployment gotchas. Auto-references the knowledge base when Claude is debugging Salesforce errors or building automation.",
+  "author": {
+    "name": "shantanudutta1"
+  },
+  "homepage": "https://github.com/shantanudutta1/salesforce-flow-sense",
+  "repository": "https://github.com/shantanudutta1/salesforce-flow-sense",
+  "license": "MIT",
+  "keywords": [
+    "salesforce",
+    "flow",
+    "apex",
+    "gotchas",
+    "pitfalls",
+    "automation",
+    "deployment"
+  ],
+  "skills": "./skills"
+}
