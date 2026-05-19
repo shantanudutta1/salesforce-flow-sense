@@ -1,32 +1,36 @@
-# Scraper Pipeline (maintainer-only)
+# Scraper Routine (maintainer-only)
 
-This directory contains the weekly research pipeline used to source new gotcha candidates. **It is not shipped to plugin users** — they receive the curated `reference/*.md` files only.
+> The weekly Claude routine that drafts candidate gotcha entries.
+> **Not shipped to plugin users.** The routine itself runs in Anthropic's
+> cloud — the files here are version-controlled artifacts (prompts,
+> runbook, checklist) used to configure and validate it.
 
-## Status
+## Files
 
-v0.1.0: scaffolding only. The actual pipeline lands in v0.2.0.
+- **[`researcher-prompt.md`](./researcher-prompt.md)** — the main prompt
+  fed to the weekly `/schedule` routine. Version-controlled so changes
+  are diffable across iterations.
+- **[`critic-prompt.md`](./critic-prompt.md)** — the adversarial-critic
+  subagent prompt, dispatched by the researcher.
+- **[`setup.md`](./setup.md)** — one-time setup runbook (PAT creation,
+  `/schedule` invocation, dry run, cron enablement).
+- **[`dry-run-checklist.md`](./dry-run-checklist.md)** — validation
+  checklist to run after every manual dry run, before enabling cron.
 
-## Planned design
+## Design reference
 
-Weekly cron (Mondays, 9am local):
+The full v0.2.0 design lives at
+[`docs/superpowers/specs/2026-05-20-scraper-design.md`](../../docs/superpowers/specs/2026-05-20-scraper-design.md).
 
-1. **Source pass** (in priority order):
-   - Salesforce Known Issues + Release Notes (ground truth)
-   - MVP/architect blogs — Automation Champion (Rakesh Gupta), UnofficialSF, Salesforce Ben, Jen Lee
-   - Salesforce Stack Exchange — newest + highest-voted on `flow` / `apex` tags
-   - r/salesforce + Trailblazer Community
+## Iterating on prompts
 
-2. **Draft output** → `reference/flow-pitfalls-pending.md` (NOT merged into the live file)
+When a dry run fails the checklist, the loop is:
 
-3. **Maintainer review** — apply quality gate per entry:
-   - Concrete trigger?
-   - Non-obvious root cause?
-   - Actionable prevention?
+1. Edit the relevant prompt file (`researcher-prompt.md` or `critic-prompt.md`)
+2. Commit the change with a message describing what failed and what you changed
+3. Update the routine's prompt via the `/schedule` skill
+4. Re-trigger the routine manually
+5. Re-validate against the checklist
 
-4. **Merge keepers** into `reference/flow-pitfalls.md` with the next stable ID
-
-5. **First Monday of each month**: dedupe + staleness audit. Move Salesforce-fixed gotchas to `reference/archive/` with a `Fixed in: <release>` note.
-
-## Tooling decision (pending)
-
-Built-in WebSearch + WebFetch should cover most sources. Escalate to Firecrawl/Tavily only if JS-rendered content blocks us.
+Expect 1–2 iterations on the initial deployment. If you're at 3+ iterations
+on the same issue, flag it as a design problem and revisit the spec.
