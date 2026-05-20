@@ -5,6 +5,26 @@ All notable changes to `salesforce-flow-sense` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] — 2026-05-20
+
+### Added
+
+- **Scheduled weekly Claude routine** (`salesforce-flow-sense-weekly-scraper`) that drafts candidate gotcha entries from four community sources and opens them as GitHub Issues for maintainer review. Runs every Monday 9:00 AM IST in Anthropic's cloud on the maintainer's Pro allowance.
+- **Two-agent design** — researcher agent drafts candidates, then dispatches an adversarial critic subagent that returns KILL / EDIT / KEEP verdicts before posting.
+- **Version-controlled prompts** in `tools/scraper/researcher-prompt.md` and `tools/scraper/critic-prompt.md` so changes are diffable across iterations.
+- **Operator artifacts**: `tools/scraper/setup.md` (one-time deployment runbook) and `tools/scraper/dry-run-checklist.md` (19-item validation checklist).
+- **Initial dry run** (2026-05-20) posted [issue #3](https://github.com/shantanudutta1/salesforce-flow-sense/issues/3) with 4 surviving candidates (1 killed, 3 edited, 1 kept by the critic) — pipeline validated end-to-end.
+
+### Design + plan
+
+- Design spec: [`docs/superpowers/specs/2026-05-20-scraper-design.md`](docs/superpowers/specs/2026-05-20-scraper-design.md)
+- Implementation plan: [`docs/superpowers/plans/2026-05-20-scraper-routine.md`](docs/superpowers/plans/2026-05-20-scraper-routine.md)
+
+### Known limitations
+
+- **Auth is via PAT-in-prompt (P2 pattern).** Any view of the routine config (API response, screenshot, screen-share) exposes the live PAT. PAT is scoped tightly (Issues read+write on this repo only, 1-year expiry) which bounds blast radius, but every exposure event must be treated as "rotate immediately."
+- **Migration to MCP-based auth** is the long-term path (deferred to v0.3.0+).
+
 ## [0.1.0] — 2026-05-20
 
 ### Added

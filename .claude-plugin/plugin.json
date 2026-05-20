@@ -1,6 +1,6 @@
 {
   "name": "salesforce-flow-sense",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Curated catalog of Salesforce Flow, Apex, and deployment gotchas. Auto-references the knowledge base when Claude is debugging Salesforce errors or building automation.",
   "author": {
     "name": "shantanudutta1"
