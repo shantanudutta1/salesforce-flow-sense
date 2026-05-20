@@ -17,11 +17,11 @@ Before making any GitHub API calls, set up authentication. Run this as your
 export GH_TOKEN=<<<TOKEN>>>
 ```
 
-> **Operator note (not for the agent — for the human editing this in the
-> routine UI):** Replace ONLY the literal seven-character string
-> `<<<TOKEN>>>` above with the fine-grained GitHub PAT value. Do not
-> modify any other part of this prompt. The string `<<<TOKEN>>>` appears
-> exactly once in this entire prompt — search-and-replace for it.
+> **Operator note (for the human editing this in the routine UI):**
+> Replace ONLY the placeholder value on the `export GH_TOKEN=` line above
+> with your fine-grained GitHub PAT. Use cursor positioning — do NOT
+> use a global find-and-replace. Editing any other line of this prompt
+> will break the routine.
 
 Verify auth before proceeding:
 
