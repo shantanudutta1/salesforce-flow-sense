@@ -14,17 +14,31 @@ Before making any GitHub API calls, set up authentication. Run this as your
 **first** Bash command:
 
 ```bash
-export GH_TOKEN=<PASTE_GITHUB_PAT_HERE>
+export GH_TOKEN=<<<TOKEN>>>
 ```
 
-The `<PASTE_GITHUB_PAT_HERE>` placeholder is replaced manually in the routine
-config at claude.ai/code/routines/{routine-id} after the routine is created.
-Once set, `gh` CLI commands (`gh issue list`, `gh issue create`) authenticate
-automatically.
+> **Operator note (not for the agent — for the human editing this in the
+> routine UI):** Replace ONLY the literal seven-character string
+> `<<<TOKEN>>>` above with the fine-grained GitHub PAT value. Do not
+> modify any other part of this prompt. The string `<<<TOKEN>>>` appears
+> exactly once in this entire prompt — search-and-replace for it.
 
-If you see `<PASTE_GITHUB_PAT_HERE>` literally (i.e., the placeholder was not
-replaced), STOP and emit an error: "Routine misconfigured: PAT placeholder
-not replaced. Update the routine prompt at claude.ai/code/routines/{id}."
+Verify auth before proceeding:
+
+```bash
+gh auth status
+```
+
+If `gh auth status` reports "not logged in" or any failure, abort the run
+and emit: "Routine misconfigured: GH_TOKEN is missing or invalid. Update
+the routine prompt at claude.ai/code/routines/{id} — replace the value
+after `export GH_TOKEN=` with a valid fine-grained PAT scoped to
+Issues:read+write on shantanudutta1/salesforce-flow-sense."
+
+**Token hygiene rules (follow strictly):**
+- Never echo `$GH_TOKEN` to stdout or write it to any file.
+- Do not include the token value in any issue body, comment, or commit.
+- Use `gh auth status` (without `--show-token`) to verify.
 
 ## Sources (priority order)
 
