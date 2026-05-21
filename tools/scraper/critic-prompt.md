@@ -40,6 +40,18 @@ For each entry, return a verdict:
    Even though dedup against the catalog was done, look for entries
    that overlap significantly with each other in THIS batch.
 
+6. **Is the `Target file` plausibly correct?**
+   - Flow runtime / Screen Flow / Apex invocable / trigger / FLS-at-runtime
+     symptoms → `flow-pitfalls.md`
+   - Deploy errors, activation order, permission set companions, package
+     install state, managed-vs-unmanaged prefix issues → `deployment-pitfalls.md`
+   - SOQL on metadata tables, `CustomObject` / `CustomField` / `EntityDefinition`
+     quirks, `--use-tooling-api` flag traps → `tooling-api-pitfalls.md`
+
+   Reject (KILL or EDIT) any entry where the `Target file` doesn't match
+   the topic. A deployment gotcha filed under `flow-pitfalls.md` is a
+   miscategorization that will pollute the catalog.
+
 ## Default bias
 
 **KILL or EDIT.** KEEP only when an entry is genuinely strong.

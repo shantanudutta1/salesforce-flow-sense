@@ -251,3 +251,35 @@ If 2+ of these miss after 4 weeks, the design is reconsidered (probably tighteni
 - Plugin v0.1.0 release: https://github.com/shantanudutta1/salesforce-flow-sense/releases/tag/v0.1.0
 - Existing catalog: `skills/gotcha-lookup/reference/flow-pitfalls.md`
 - Claude Code `/schedule` skill (built-in, manages cron routines on Anthropic infrastructure)
+
+---
+
+## v0.3.0 amendment (2026-05-21)
+
+The catalog now spans **three reference files** (`flow-pitfalls.md`,
+`deployment-pitfalls.md`, `tooling-api-pitfalls.md`). The two new files
+shipped empty under v0.3.0 — entries accrete through this same routine.
+
+Scraper changes in v0.3.0:
+
+1. **Dedup catalog read** now reads all three reference files
+   (`researcher-prompt.md` Process Step 2). The internal "already
+   catalogued" index is built across all three.
+2. **Source pass** explicitly hunts across Flow/Apex, deployment/metadata,
+   and Tooling API topics. Tier-1/2 source queries broadened accordingly.
+3. **Output format** adds a per-candidate `Target file` field, so the
+   maintainer can route the entry to the right reference file at merge time.
+4. **Critic** gained a 6th adversarial criterion that rejects entries
+   where `Target file` doesn't match the topic.
+5. **Dry-run checklist** updated: D4 now spans all three files; new C6
+   checks `Target file` validity; new D5 checks global stable-ID continuity.
+
+**Unchanged** in v0.3.0:
+
+- Two-agent architecture (researcher + critic subagent).
+- GitHub Issue per week as the delivery channel.
+- Weekly cadence (Mon 9am local). PAT-in-prompt auth (still the v0.2.0
+  known limitation; MCP migration remains deferred).
+- The "topic index for ~100 entries" risk-mitigation item is **still
+  deferred to v0.4.0+** — adding two empty files doesn't change context
+  pressure on the prompt yet.

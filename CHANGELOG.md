@@ -5,6 +5,26 @@ All notable changes to `salesforce-flow-sense` will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] — 2026-05-21
+
+### Added
+
+- **`reference/deployment-pitfalls.md`** — new reference module for metadata deploy gotchas, record type activation order, permission set companions, package install state, and managed-vs-unmanaged prefix issues. Ships empty; entries accrete via the weekly scraper + maintainer PRs.
+- **`reference/tooling-api-pitfalls.md`** — new reference module for Tooling API quirks, SOQL on metadata tables, `CustomObject`/`CustomField`/`EntityDefinition` traps, and `--use-tooling-api` flag pitfalls. Ships empty.
+- **SKILL.md routing extended** — the `gotcha-lookup` skill now auto-triggers on deployment and Tooling API queries in addition to Flow/Apex work, and selectively loads only the reference file(s) relevant to the situation.
+- **Scraper expanded to all three topic areas** — `tools/scraper/researcher-prompt.md` now reads all three reference files for dedup, hunts Flow + deployment + Tooling API sources, and adds a `Target file` field to each candidate so the maintainer knows which reference file an entry belongs in.
+- **Critic gained target-file plausibility check** — `tools/scraper/critic-prompt.md` adds a 6th adversarial criterion that rejects entries miscategorized across reference files.
+- **Dry-run checklist updated** — `tools/scraper/dry-run-checklist.md` adds C6 (Target file validity), D5 (global stable-ID continuity); D4 now spans all three reference files.
+
+### Changed
+
+- **Stable IDs documented as a single global series** across all three reference files. README's stable-ID promise is unchanged; this just makes the cross-file invariant explicit. Next available ID is `#18`.
+
+### Notes
+
+- Both new reference modules ship **empty**. Real entries land via the existing scraper pipeline (Mon 9am IST) followed by human-authored PRs. The structural plumbing (skill routing, dedup expansion, target-file tagging) lands this release so entries can be merged without further infra changes.
+- "Topic index for scalable dedup" (originally tagged for v0.3.0) is **deferred to v0.4.0+**. Adding two empty files doesn't change prompt-context pressure, so the index isn't blocking yet.
+
 ## [0.2.0] — 2026-05-20
 
 ### Added

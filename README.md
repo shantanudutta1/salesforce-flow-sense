@@ -37,16 +37,18 @@ salesforce-flow-sense/
 ├── skills/gotcha-lookup/
 │   ├── SKILL.md                      thin router skill
 │   └── reference/
-│       ├── flow-pitfalls.md          17 entries covering Flow + Apex
+│       ├── flow-pitfalls.md          17 entries covering Flow + Apex runtime
+│       ├── deployment-pitfalls.md    metadata deploy, RT activation, perm-set companions
+│       ├── tooling-api-pitfalls.md   Tooling API quirks, CustomObject table traps
 │       └── archive/                  Salesforce-fixed gotchas (dated)
 ├── docs/superpowers/specs/           design docs for upcoming work
 ├── tools/scraper/                    maintainer-side: routine notes
 └── CHANGELOG.md
 ```
 
-Coming in future versions:
-- `deployment-pitfalls.md` — metadata deploy, record type activation, permission set companions
-- `tooling-api-pitfalls.md` — Tooling API quirks, CustomObject table omissions
+`deployment-pitfalls.md` and `tooling-api-pitfalls.md` ship empty in
+v0.3.0 — entries accrete via the weekly scraper routine and maintainer
+PRs (same pipeline as `flow-pitfalls.md`).
 
 ## How the catalog grows
 
@@ -80,8 +82,9 @@ Once merged, the next version bump ships the entry to all installed users.
 | Version | Status | Highlights |
 |---|---|---|
 | **v0.1.0** | ✅ Released | Initial 17 seed entries; `gotcha-lookup` skill; static catalog |
-| **v0.2.0** | 🚧 In design | Scheduled weekly Claude routine that drafts new candidates and opens them as GitHub Issues for review. Design: [docs/superpowers/specs/2026-05-20-scraper-design.md](docs/superpowers/specs/2026-05-20-scraper-design.md) |
-| **v0.3.0** | 📋 Planned | `deployment-pitfalls.md` and `tooling-api-pitfalls.md` reference files; topic index for scalable dedup |
+| **v0.2.0** | ✅ Released | Scheduled weekly Claude routine that drafts new candidates and opens them as GitHub Issues for review. Design: [docs/superpowers/specs/2026-05-20-scraper-design.md](docs/superpowers/specs/2026-05-20-scraper-design.md) |
+| **v0.3.0** | ✅ Released | `deployment-pitfalls.md` and `tooling-api-pitfalls.md` reference modules added (empty at ship time); SKILL routing extended to deployment + Tooling API queries; scraper expanded to research and dedup across all three reference files |
+| **v0.4.0** | 📋 Planned | Topic index for scalable dedup as catalog grows past ~100 entries; MCP-based auth migration to retire PAT-in-prompt |
 
 ## Stable ID promise
 

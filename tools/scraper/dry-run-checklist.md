@@ -23,10 +23,13 @@
 - [ ] **C2.** The issue title matches `Gotcha candidates — YYYY-MM-DD` or
       `No new gotchas — YYYY-MM-DD` (depending on whether candidates survived).
 - [ ] **C3.** If candidates exist, the issue is labeled `candidate`.
-- [ ] **C4.** Each candidate in the issue body has all four fields:
-      What happened / Root cause / Prevention / Source(s).
+- [ ] **C4.** Each candidate in the issue body has all five fields:
+      What happened / Root cause / Prevention / Source(s) / Target file.
 - [ ] **C5.** Each candidate has a clickable source URL that actually loads
       and describes the gotcha. (Hallucination check — sample at least one.)
+- [ ] **C6.** Each candidate's `Target file` is exactly one of
+      `flow-pitfalls.md`, `deployment-pitfalls.md`, or `tooling-api-pitfalls.md`,
+      and the topic plausibly matches that file's scope.
 
 ## D. Quality gate
 
@@ -35,8 +38,12 @@
 - [ ] **D2.** Every candidate has a non-obvious root cause (a competent
       dev would guess wrong about WHY).
 - [ ] **D3.** Every candidate has a checkable prevention (not "be careful").
-- [ ] **D4.** No candidate duplicates an existing entry in
-      `reference/flow-pitfalls.md` (semantic dedup, not just title match).
+- [ ] **D4.** No candidate duplicates an existing entry in **any** of the
+      three reference files (`flow-pitfalls.md`, `deployment-pitfalls.md`,
+      `tooling-api-pitfalls.md`) — semantic dedup, not just title match.
+- [ ] **D5.** Stable IDs in this batch continue the global series
+      (no number is reused; the lowest new ID equals
+      `max(#N across all three reference files) + 1`).
 
 ## E. Critic step
 
@@ -66,7 +73,9 @@
 | B1, B2, B3 | Adjust the source-pass instructions in `researcher-prompt.md` |
 | C1–C4 | Adjust the "Post output" section of `researcher-prompt.md` |
 | C5, D1–D3 | Tighten the quality-gate language in `researcher-prompt.md`; make critic more adversarial in `critic-prompt.md` |
-| D4 | Check that the routine is reading the catalog file before drafting (Process Step 2 in researcher-prompt.md) |
+| C6 | Tighten the `Target file` rubric in `critic-prompt.md` (criterion #6) |
+| D4 | Check that the routine is reading **all three** catalog files before drafting (Process Step 2 in researcher-prompt.md) |
+| D5 | Reinforce the global stable-ID guidance in `researcher-prompt.md` Process Step 2 |
 | E1–E3 | Verify the researcher is actually dispatching the critic subagent (Process Step 7) |
 | F1 | Add a hard cap reminder in the researcher prompt |
 | G1 | Adjust the "If 0 survive" branch of the "Post output" section |

@@ -44,17 +44,18 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
 
 **Tier 1 — Ground truth (highest priority):**
 - Salesforce Known Issues board (search via WebSearch with queries like
-  `site:salesforce.com "known issue" flow`)
-- Latest Salesforce Release Notes (current release docs)
+  `site:salesforce.com "known issue" flow`, `... deploy`, `... tooling api`)
+- Latest Salesforce Release Notes (current release docs — flow, deploy, metadata API, tooling API sections)
 
 **Tier 2 — MVP / architect blogs:**
 - automationchampion.com (Rakesh Gupta)
 - unofficialsf.com
-- salesforceben.com (flow/apex tag)
+- salesforceben.com (flow / apex / deployment / DevOps tag)
 - jenwlee.com
 
 **Tier 3 — Q&A signal:**
-- salesforce.stackexchange.com — newest questions on `[flow]` and `[apex]` tags
+- salesforce.stackexchange.com — newest questions on `[flow]`, `[apex]`,
+  `[deployment]`, `[metadata-api]`, and `[tooling-api]` tags
 
 **Tier 4 — Trench reports:**
 - reddit.com/r/salesforce — posts mentioning "gotcha", "got bit",
@@ -67,12 +68,19 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
    git clone https://github.com/shantanudutta1/salesforce-flow-sense /tmp/sfs
    ```
 
-2. Read the existing catalog to know what's already covered:
+2. Read the existing catalog to know what's already covered. The catalog
+   is split across **three reference files** — read all of them:
    ```
-   cat /tmp/sfs/skills/gotcha-lookup/reference/flow-pitfalls.md
+   cat /tmp/sfs/skills/gotcha-lookup/reference/flow-pitfalls.md \
+       /tmp/sfs/skills/gotcha-lookup/reference/deployment-pitfalls.md \
+       /tmp/sfs/skills/gotcha-lookup/reference/tooling-api-pitfalls.md
    ```
-   Build an internal index of root causes (not just titles — the same
-   gotcha can be described with different titles).
+   Build an internal index of root causes across all three files (not just
+   titles — the same gotcha can be described with different titles).
+
+   **Stable IDs are one global series across the three files.** The next
+   available ID is `max(#N across all three files) + 1`. Compute this once
+   and reuse it for every draft in this run, incrementing as you go.
 
 3. List open candidate issues to know what's already pending:
    ```
@@ -81,12 +89,16 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
    ```
 
 4. **Source pass.** Spend ~75% of your tool budget on tiers 1–2, ~25%
-   on tiers 3–4. Focus on content from the last 14 days.
+   on tiers 3–4. Focus on content from the last 14 days. Hunt across all
+   three topic areas: **Flow/Apex runtime**, **deployment / metadata**,
+   and **Tooling API**.
    For each potential candidate, find:
    - The **concrete trigger** (specific scenario)
    - The **non-obvious root cause** (the WHY a competent dev would miss)
    - The **actionable prevention** (a checkable step, not "be careful")
    - A **source URL** you can cite
+   - The **target reference file** the entry belongs in
+     (`flow-pitfalls.md`, `deployment-pitfalls.md`, or `tooling-api-pitfalls.md`)
 
 5. **Quality gate.** Reject any candidate that fails ANY of:
    - Trigger is concrete (not "sometimes flows fail")
@@ -122,11 +134,13 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
 - **Root cause**: [non-obvious mechanism]
 - **Prevention**: [checkable step]
 - **Source(s)**: [URL(s)]
+- **Target file**: flow-pitfalls.md | deployment-pitfalls.md | tooling-api-pitfalls.md
 ```
 
 ## Constraints
 
 - Never write to `reference/*.md` directly — only open GitHub issues.
+- Every candidate must specify exactly one `Target file`.
 - Never propose more than 5 candidates per run.
 - Always cite source URLs for each candidate.
 - If a source is unreachable (rate-limited, 503), try the other three and
