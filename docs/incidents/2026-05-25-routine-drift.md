@@ -53,7 +53,7 @@ The weekly scraper routine attempted to deliver candidates by committing a file 
 | 1 | Add explicit "Hard constraints — no git operations, no file writes in repo working tree" section to `researcher-prompt.md` | ✅ done (commit on 2026-05-25) | maintainer |
 | 2 | Require routine to compute and announce `next_id` before drafting any candidate | ✅ done (commit on 2026-05-25) | maintainer |
 | 3 | Require routine to STOP (not fall back to git or file writes) if `gh issue create` fails | ✅ done (commit on 2026-05-25) | maintainer |
-| 4 | Hand-post the 5 salvaged candidates as a GitHub Issue, preserving #27–#31 IDs | ⏳ pending (Task 5 of recovery plan) | maintainer |
+| 4 | Hand-post the 5 salvaged candidates as a GitHub Issue, preserving #27–#31 IDs | ✅ done — [issue #4](https://github.com/shantanudutta1/salesforce-flow-sense/issues/4) | maintainer |
 | 5 | **Rotate the live PAT** (exposed to the maintainer's Claude Code session during this investigation) | ⏳ pending | maintainer |
 | 6 | **Resync routine config**: paste the v0.3.0+hardened `researcher-prompt.md` into the live routine config, replacing the v0.2.0 prompt that's there now | ⏳ pending | maintainer |
 | 7 | Verify the fresh PAT has scopes `Contents: Read-only` + `Issues: Read and write` (NOT Contents: write) | ⏳ pending | maintainer |
@@ -74,5 +74,5 @@ The weekly scraper routine attempted to deliver candidates by committing a file 
 - v0.2.0 setup runbook: [`tools/scraper/setup.md`](../../tools/scraper/setup.md) (Step 4, "Iterate on the prompt if needed")
 - v0.3.0 prompt commit: `6750931` (2026-05-21) — content committed locally, never deployed to the live routine
 - Hardening commit (this incident's mitigation): see `tools/scraper/researcher-prompt.md` immediately after the post-mortem commit
-- Recovered candidates Issue: [link will be added once Task 4 completes]
+- Recovered candidates Issue: <https://github.com/shantanudutta1/salesforce-flow-sense/issues/4>
 - Recovery plan: [`docs/superpowers/plans/2026-05-25-routine-drift-recovery.md`](../superpowers/plans/2026-05-25-routine-drift-recovery.md)
