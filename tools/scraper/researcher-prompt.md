@@ -40,6 +40,38 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
 - Do not include the token value in any issue body, comment, or commit.
 - Use `gh auth status` (without `--show-token`) to verify.
 
+## Hard constraints (violation = abort and report)
+
+These constraints are stricter than the rest of the prompt. **Any single
+violation is a routine-failure event** — abort the run, do not fall back,
+do not improvise, and surface the violation in the run log.
+
+1. **Never run `git commit`, `git push`, `git branch`, `git checkout -b`,
+   `git tag`, or any git operation that mutates a remote or creates a
+   branch / commit / tag.** Read-only operations (`git clone`, `git log`,
+   `git diff`, `git status`) are allowed.
+2. **Never create or modify files inside the cloned repo working tree.**
+   This includes `candidates/`, `reference/`, `skills/`, `tools/`,
+   `docs/`, and any other path under the repo root. The only files this
+   routine creates are GitHub Issues via `gh issue create`. Use `/tmp/`
+   for any scratch work.
+3. **The only delivery mechanism for candidates is `gh issue create`.**
+   If `gh issue create` fails for any reason (auth, rate-limit, 5xx,
+   missing scope), STOP. Do not fall back to git operations. Do not
+   fall back to MCP tools. Do not write candidates to a file in the
+   repo. Do not push a branch. Surface the failure with the exact error
+   text and end the run with a `routine-failure` status.
+4. **Never request additional PAT scopes from the user.** The PAT is
+   intentionally scoped to `Contents: Read-only` + `Issues: Read and write`
+   as a defense-in-depth boundary. If a step fails because a scope is
+   missing, that is a routine-failure event — report it and stop. Do
+   not ask the user to grant elevated permissions to make the failure
+   go away.
+
+Violations of any of the above indicate prompt drift or executor
+improvisation. Either way, the run is aborted and the maintainer is
+expected to investigate before re-enabling the routine.
+
 ## Sources (priority order)
 
 **Tier 1 — Ground truth (highest priority):**
@@ -78,9 +110,37 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
    Build an internal index of root causes across all three files (not just
    titles — the same gotcha can be described with different titles).
 
-   **Stable IDs are one global series across the three files.** The next
-   available ID is `max(#N across all three files) + 1`. Compute this once
-   and reuse it for every draft in this run, incrementing as you go.
+   **Stable IDs are one global series across the three files.** Compute
+   `next_id` and **announce it in the run log before drafting any
+   candidate**. Steps:
+
+   ```bash
+   # Highest ID currently in the catalog files
+   catalog_max=$(grep -hE '^### #[0-9]+' \
+     /tmp/sfs/skills/gotcha-lookup/reference/*.md \
+     | sed -E 's/^### #([0-9]+).*/\1/' | sort -n | tail -1)
+
+   # Highest ID reserved by open candidate Issues (from Step 3 output)
+   # — parse `### #N` lines out of the open-issue bodies
+   issue_max=$(gh issue list --repo shantanudutta1/salesforce-flow-sense \
+     --label candidate --state open --limit 50 --json body --jq '.[].body' \
+     | grep -hE '^### #[0-9]+' \
+     | sed -E 's/^### #([0-9]+).*/\1/' | sort -n | tail -1)
+
+   # next_id = max(catalog_max, issue_max, 0) + 1
+   next_id=$(( $(printf '%s\n%s\n0\n' "$catalog_max" "$issue_max" | sort -n | tail -1) + 1 ))
+   echo "next_id = #$next_id (catalog_max=#$catalog_max, issue_max=#$issue_max)"
+   ```
+
+   Output a line in the run log matching:
+   `next_id = #N (catalog_max=#X, issue_max=#Y)`.
+
+   Use `next_id` for the first draft, `next_id + 1` for the second, and
+   so on, incrementing monotonically. **Do not draft any candidate
+   before announcing `next_id`.** If the announcement is missing from
+   the log, the run is invalid and must be re-triggered. If `gh issue
+   list` fails (preventing `issue_max` computation), this is a
+   routine-failure event per Hard Constraint #3 — STOP.
 
 3. List open candidate issues to know what's already pending:
    ```
@@ -119,12 +179,21 @@ Issues:read+write on shantanudutta1/salesforce-flow-sense."
    - EDIT: incorporate the suggested edit
    - KEEP: include as-is
 
-9. **Post output.**
+9. **Post output.** Use `gh issue create` only. **Hard Constraint #3 applies:**
+   if `gh issue create` fails for any reason, STOP and surface the exact
+   error text. Do not fall back to git operations, file writes inside the
+   repo, MCP tools, or any other delivery mechanism.
+
    - If **0 candidates survive**: open issue titled
      `No new gotchas — YYYY-MM-DD` with body listing the sources scanned.
    - If **1+ candidates survive**: open issue titled
      `Gotcha candidates — YYYY-MM-DD` with label `candidate`. Body lists
      the surviving drafts plus the critic's verdicts as a transparency log.
+
+   **Verification:** after `gh issue create` returns, the run log must
+   contain the new Issue's URL. If it does not (e.g., the command exited
+   0 but produced no URL), treat the run as failed regardless of exit
+   code and surface a `routine-failure` status.
 
 ## Output format (per entry)
 
